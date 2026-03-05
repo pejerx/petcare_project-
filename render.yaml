@@ -17,8 +17,9 @@ services:
         value: https://petcare-frontend.onrender.com
 
   # ── Frontend (React + Vite) ────────────────────────────────────────────────
-  - type: static
+  - type: web
     name: petcare-frontend
+    runtime: static
     rootDir: frontend/petcare1
     buildCommand: npm install && npm run build
     staticPublishPath: dist
