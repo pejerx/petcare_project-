@@ -3,7 +3,7 @@ import './SignUp.css';
 import { TextField, Button, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import logo from '/src/assets/fetch_and_fur_logo1.png';
 import { styled } from '@mui/material/styles';
 
@@ -78,7 +78,7 @@ const SignUp = () => {
 
     try {
       if (role === 'petowner') {
-        await axios.post('http://localhost:8080/api/petowners', {
+        await axiosInstance.post('/api/petowners', {
           firstname, lastname, email, phoneNumber, address, password
         });
         alert('Pet Owner account created!');
@@ -87,7 +87,7 @@ const SignUp = () => {
           setError('Please fill out specialization and experience.');
           return;
         }
-        await axios.post('http://localhost:8080/api/veterinarians', {
+        await axiosInstance.post('/api/veterinarians', {
           firstname, lastname, email, phoneNumber, specialization, experience, password
         });
         alert('Veterinarian account created!');
@@ -104,7 +104,7 @@ const SignUp = () => {
     <>
       <Header />
       <div className="login-container">
-        <form className="login-left"> 
+        <form className="login-left">
           <img src={logo} width={150} height={40} alt="Logo" />
           <h1>Sign Up</h1>
           <Tabs textColor="secondary" indicatorColor="secondary" value={role} onChange={(e, newVal) => setRole(newVal)} sx={{ mb: 2 }}>
@@ -113,51 +113,51 @@ const SignUp = () => {
           </Tabs>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-  {(() => {
-    const fields = [
-      { label: 'First Name', name: 'firstname' },
-      { label: 'Last Name', name: 'lastname' },
-      { label: 'Email', name: 'email' },
-      { label: 'Phone Number', name: 'phoneNumber' },
-      ...(role === 'petowner' ? [{ label: 'Address', name: 'address' }] : []),
-      ...(role === 'veterinarian'
-        ? [
-            { label: 'Specialization', name: 'specialization' },
-            { label: 'Experience (years)', name: 'experience', type: 'number' },
-          ]
-        : []),
-      { label: 'Password', name: 'password', type: 'password' },
-      { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
-    ];
+            {(() => {
+              const fields = [
+                { label: 'First Name', name: 'firstname' },
+                { label: 'Last Name', name: 'lastname' },
+                { label: 'Email', name: 'email' },
+                { label: 'Phone Number', name: 'phoneNumber' },
+                ...(role === 'petowner' ? [{ label: 'Address', name: 'address' }] : []),
+                ...(role === 'veterinarian'
+                  ? [
+                    { label: 'Specialization', name: 'specialization' },
+                    { label: 'Experience (years)', name: 'experience', type: 'number' },
+                  ]
+                  : []),
+                { label: 'Password', name: 'password', type: 'password' },
+                { label: 'Confirm Password', name: 'confirmPassword', type: 'password' },
+              ];
 
-    // Group into pairs (2 per row)
-    const rows = [];
-    for (let i = 0; i < fields.length; i += 2) {
-      rows.push(fields.slice(i, i + 2));
-    }
+              // Group into pairs (2 per row)
+              const rows = [];
+              for (let i = 0; i < fields.length; i += 2) {
+                rows.push(fields.slice(i, i + 2));
+              }
 
-    return rows.map((row, idx) => (
-      <div key={idx} style={{ display: 'flex', gap: '16px' }}>
-        {row.map((field) => (
-          <TextField
-            key={field.name}
-            label={field.label}
-            name={field.name}
-            value={form[field.name]}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            type={field.type || 'text'}
-          />
-        ))}
-        {row.length === 1 && <div style={{ flex: 1 }} />} {/* Empty space filler if odd number */}
-      </div>
-    ));
-  })()}
-</div>
+              return rows.map((row, idx) => (
+                <div key={idx} style={{ display: 'flex', gap: '16px' }}>
+                  {row.map((field) => (
+                    <TextField
+                      key={field.name}
+                      label={field.label}
+                      name={field.name}
+                      value={form[field.name]}
+                      onChange={handleChange}
+                      fullWidth
+                      margin="normal"
+                      type={field.type || 'text'}
+                    />
+                  ))}
+                  {row.length === 1 && <div style={{ flex: 1 }} />} {/* Empty space filler if odd number */}
+                </div>
+              ));
+            })()}
+          </div>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {success && <p style={{ color: 'green' }}>{success}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
 
           <CustomButton fullWidth variant="contained" onClick={handleSubmit}>
             Create Account
@@ -173,7 +173,7 @@ const SignUp = () => {
             Already have an account?{' '}
             <span className="link" onClick={() => navigate('/login')}>Login here</span>
           </p>
-          </form>
+        </form>
 
 
 

@@ -3,7 +3,7 @@ import './Login.css';
 import { TextField, Button, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import logo from '/src/assets/fetch_and_fur_logo1.png';
 import { styled } from '@mui/material/styles';
 
@@ -60,10 +60,10 @@ const Login = () => {
     try {
       const endpoint =
         role === 'petowner'
-          ? 'http://localhost:8080/api/petowners/login'
-          : 'http://localhost:8080/api/veterinarians/login';
+          ? '/api/petowners/login'
+          : '/api/veterinarians/login';
 
-      const res = await axios.post(endpoint, {
+      const res = await axiosInstance.post(endpoint, {
         email: form.email,
         password: form.password,
       });
@@ -86,8 +86,8 @@ const Login = () => {
       <Header />
       <div className="login-container">
         <div className="login-left">
-            <img src={logo} width={150} height={40} alt="Logo" />
-          
+          <img src={logo} width={150} height={40} alt="Logo" />
+
           <h1>Login</h1>
 
           <Tabs value={role} textColor="secondary" indicatorColor="secondary" onChange={(e, newVal) => setRole(newVal)} sx={{ mb: 2 }}>
@@ -138,7 +138,7 @@ const Login = () => {
 
           <p className="bottom-text">
             Don't have an account yet?{' '}
-            <span className="link"  onClick={() => navigate('/signup')}>
+            <span className="link" onClick={() => navigate('/signup')}>
               Register for free
             </span>
           </p>

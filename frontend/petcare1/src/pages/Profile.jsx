@@ -3,7 +3,7 @@ import './Profile.css';
 import { TextField, Button, Modal, Box, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import PetRegisterForm from '../components/PetRegisterForm';
 import EditAppointmentForm from '../components/EditAppointmentForm';
 import EditPet from '../components/EditPet';
@@ -36,7 +36,7 @@ const Profile = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/api/petowners/email/${email}`)
+    axiosInstance.get(`/api/petowners/email/${email}`)
       .then((res) => {
         const data = res.data;
         setProfile({
@@ -49,12 +49,12 @@ const Profile = () => {
         setPetOwnerId(data.id);
 
         // Fetch appointments
-        axios.get(`http://localhost:8080/api/appointments/owner/${data.id}`)
+        axiosInstance.get(`/api/appointments/owner/${data.id}`)
           .then((res) => setHistory(res.data))
           .catch(() => console.error('Could not load appointments.'));
 
         // Fetch pets
-        axios.get(`http://localhost:8080/api/pets/owner/${data.id}`)
+        axiosInstance.get(`/api/pets/owner/${data.id}`)
           .then((res) => setPets(res.data))
           .catch(() => console.error('Could not load pets.'));
       })
@@ -68,7 +68,7 @@ const Profile = () => {
   };
 
   const handleSave = () => {
-    axios.put(`http://localhost:8080/api/petowners/${petOwnerId}`, profile)
+    axiosInstance.put(`/api/petowners/${petOwnerId}`, profile)
       .then(() => {
         alert('Profile updated!');
         setIsEditing(false);
@@ -81,14 +81,14 @@ const Profile = () => {
   };
 
   const handleEditSuccess = () => {
-    axios.get(`http://localhost:8080/api/appointments/owner/${petOwnerId}`)
+    axiosInstance.get(`/api/appointments/owner/${petOwnerId}`)
       .then((res) => setHistory(res.data));
     setEditingAppointment(null);
   };
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to cancel this appointment?')) {
-      axios.delete(`http://localhost:8080/api/appointments/${id}`)
+      axiosInstance.delete(`/api/appointments/${id}`)
         .then(() => {
           alert('Appointment cancelled');
           setHistory((prev) => prev.filter((item) => item.id !== id));
@@ -98,7 +98,7 @@ const Profile = () => {
 
   const handleDeletePet = (petId) => {
     if (window.confirm('Are you sure you want to delete this pet?')) {
-      axios.delete(`http://localhost:8080/api/pets/${petId}`)
+      axiosInstance.delete(`/api/pets/${petId}`)
         .then(() => {
           alert('Pet deleted!');
           setPets(prev => prev.filter(p => p.petId !== petId));
@@ -208,8 +208,8 @@ const Profile = () => {
               disabled
               margin="normal"
             />
-<div className="container">
-</div>
+            <div className="container">
+            </div>
 
             <div className="history-box">
               <h4>Appointment History</h4>
@@ -219,7 +219,7 @@ const Profile = () => {
                 <>
                   {history.slice(0, 3).map((log, i) => (
                     <div key={i} className="history-entry">
-                      <div><strong>{log.pet?.petname }</strong> - {log.serviceType}</div>
+                      <div><strong>{log.pet?.petname}</strong> - {log.serviceType}</div>
                       <div>Vet: Dr. {log.veterinarian?.firstname} {log.veterinarian?.lastname}</div>
                       <div>{log.date} at {log.time}</div>
                       <div>Status: {log.status}</div>
@@ -255,7 +255,7 @@ const Profile = () => {
             onClose={() => setPetRegisterOpen(false)}
             onSuccess={() => {
               setPetRegisterOpen(false);
-              axios.get(`http://localhost:8080/api/pets/owner/${petOwnerId}`)
+              axiosInstance.get(`/api/pets/owner/${petOwnerId}`)
                 .then((res) => setPets(res.data))
                 .catch(() => console.error('Could not refresh pets list.'));
             }}
@@ -271,7 +271,7 @@ const Profile = () => {
             onClose={() => setEditingPet(null)}
             onSuccess={() => {
               setEditingPet(null);
-              axios.get(`http://localhost:8080/api/pets/owner/${petOwnerId}`)
+              axiosInstance.get(`/api/pets/owner/${petOwnerId}`)
                 .then((res) => setPets(res.data));
             }}
           />

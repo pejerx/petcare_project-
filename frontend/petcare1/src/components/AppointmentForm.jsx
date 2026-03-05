@@ -4,7 +4,7 @@ import {
   Box, Button, Grid, InputLabel, MenuItem,
   Select, TextField, Typography, Paper
 } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 import './AppointmentForm.css';
 
 
@@ -35,11 +35,11 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
     const ownerId = parsedUser.id;
     setFormData(prev => ({ ...prev, ownerId }));
 
-    axios.get(`http://localhost:8080/api/pets/owner/${ownerId}`)
+    axiosInstance.get(`/api/pets/owner/${ownerId}`)
       .then(res => setPets(res.data))
       .catch(() => console.error('Failed to load pets'));
 
-    axios.get(`http://localhost:8080/api/veterinarians`)
+    axiosInstance.get(`/api/veterinarians`)
       .then(res => setVeterinarians(res.data))
       .catch(() => console.error('Failed to load vets'));
   }, []);
@@ -53,7 +53,7 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
         veterinarian: { id: formData.veterinarianId }
       };
 
-      await axios.post('http://localhost:8080/api/appointments', payload);
+      await axiosInstance.post('/api/appointments', payload);
       alert('Appointment booked successfully!');
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -140,8 +140,8 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
                 <MenuItem value="Vaccination">Vaccination</MenuItem>
                 <MenuItem value="Check-up">Check-up</MenuItem>
                 <MenuItem value="Check-up">Pet Training</MenuItem>
-                
-                
+
+
               </Select>
             </Box>
           </Grid>
@@ -174,7 +174,7 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
 
         <Box className="appointment-footer">
           <Button className="custom-button outlined" onClick={onClose}>Cancel</Button>
-                    <Button className="custom-button contained" onClick={handleSubmit}>Save Changes</Button>
+          <Button className="custom-button contained" onClick={handleSubmit}>Save Changes</Button>
         </Box>
       </Box>
     </Paper>

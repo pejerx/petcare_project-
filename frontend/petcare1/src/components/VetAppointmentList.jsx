@@ -10,7 +10,7 @@ import {
   InputLabel,
   Button
 } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 const VetAppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -20,9 +20,9 @@ const VetAppointmentList = () => {
 
   useEffect(() => {
     if (vet?.id) {
-      axios.get(`http://localhost:8080/api/appointments/veterinarian/${vet.id}`)
-        axios.then(res => setAppointments(res.data))
-        axios.catch(err => console.error('Failed to fetch appointments', err));
+      axiosInstance.get(`/api/appointments/veterinarian/${vet.id}`)
+        .then(res => setAppointments(res.data))
+        .catch(err => console.error('Failed to fetch appointments', err));
     }
   }, [vet]);
 
@@ -35,7 +35,7 @@ const VetAppointmentList = () => {
   const handleSave = async (id) => {
     const updated = appointments.find(a => a.id === id);
     try {
-      await axios.put(`http://localhost:8080/api/appointments/${id}`, updated);
+      await axiosInstance.put(`/api/appointments/${id}`, updated);
       alert('Appointment updated');
       setEditingId(null);
     } catch (err) {
@@ -46,7 +46,7 @@ const VetAppointmentList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to cancel this appointment?')) return;
     try {
-      await axios.delete(`http://localhost:8080/api/appointments/${id}`);
+      await axiosInstance.delete(`/api/appointments/${id}`);;
       setAppointments(appointments.filter(a => a.id !== id));
       alert('Appointment canceled');
     } catch (err) {

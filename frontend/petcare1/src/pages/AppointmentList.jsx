@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import {
   Box,
   Typography,
@@ -17,7 +17,7 @@ const AppointmentsList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/appointments')
+    axiosInstance.get('/api/appointments')
       .then(response => {
         setAppointments(response.data);
       })

@@ -1,47 +1,39 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
-const API_BASE = 'http://localhost:8080/api/appointments';
+const BASE = '/api/appointments';
 
 // CREATE: Add a new appointment
 export const createAppointment = (appointment) => {
-  return axios.post(API_BASE, appointment);
+  return axiosInstance.post(BASE, appointment);
 };
 
 // READ: Get all appointments
 export const getAppointments = () => {
-  return axios.get(API_BASE);
+  return axiosInstance.get(BASE);
 };
 
 // READ: Get one appointment by ID
 export const getAppointmentById = (id) => {
-  return axios.get(`${API_BASE}/${id}`);
+  return axiosInstance.get(`${BASE}/${id}`);
 };
 
-// READ: Get appointments by owner ID ✅
+// READ: Get appointments by owner ID
 export const getAppointmentsByOwnerId = (ownerId) => {
-  return axios.get(`${API_BASE}/owner/${ownerId}`);
+  return axiosInstance.get(`${BASE}/owner/${ownerId}`);
 };
-
-// UPDATE: Update an existing appointment by ID
-/*export const updateAppointment = (id, updatedAppointment) => {
-  return axios.put(`${API_BASE}/${id}`, updatedAppointment);
-};*/
 
 // DELETE: Remove an appointment by ID
 export const deleteAppointment = (id) => {
-  return axios.delete(`${API_BASE}/${id}`);
+  return axiosInstance.delete(`${BASE}/${id}`);
 };
 
 export const updateAppointment = async (id, data) => {
-  const res = await axios.put(`http://localhost:8080/api/appointments/${id}`, data);
+  const res = await axiosInstance.put(`${BASE}/${id}`, data);
   return res.data;
 };
 
 // PATCH: Update status of an appointment
 export const updateAppointmentStatus = async (id, status) => {
-  const res = await axios.patch(`${API_BASE}/${id}/status`, { status });
+  const res = await axiosInstance.patch(`${BASE}/${id}/status`, { status });
   return res.data;
 };
-
-
-

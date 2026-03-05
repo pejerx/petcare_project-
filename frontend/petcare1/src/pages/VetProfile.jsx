@@ -4,7 +4,7 @@ import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 const VetProfile = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const VetProfile = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/api/veterinarians/email/${email}`)
+    axiosInstance.get(`/api/veterinarians/email/${email}`)
       .then((res) => {
         const data = res.data;
         setVetId(data.id);
@@ -56,7 +56,7 @@ const VetProfile = () => {
   };
 
   const handleSave = () => {
-    axios.put(`http://localhost:8080/api/veterinarians/${vetId}`, profile)
+    axiosInstance.put(`/api/veterinarians/${vetId}`, profile)
       .then(() => {
         alert('Profile updated!');
         setIsEditing(false);

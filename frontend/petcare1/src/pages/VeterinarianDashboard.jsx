@@ -9,7 +9,7 @@ import {
   Modal
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import logo from '/src/assets/fetch_and_fur_logo1.png';
 import EditAppointmentForm from '../components/EditAppointmentForm';
 
@@ -31,8 +31,8 @@ const VeterinarianDashboard = () => {
   }, []);
 
   const fetchAppointments = (vetId) => {
-    axios
-      .get(`http://localhost:8080/api/appointments/veterinarian/${vetId}`)
+    axiosInstance
+      .get(`/api/appointments/veterinarian/${vetId}`)
       .then((res) => setAppointments(res.data))
       .catch((err) => console.error('Failed to fetch vet appointments:', err));
   };
@@ -40,7 +40,7 @@ const VeterinarianDashboard = () => {
   const handleDeleteAppointment = async (id) => {
     if (window.confirm("Are you sure you want to cancel this appointment?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/appointments/${id}`);
+        await axiosInstance.delete(`/api/appointments/${id}`);
         setAppointments(prev => prev.filter(appt => appt.id !== id));
       } catch (err) {
         console.error(err);
@@ -51,7 +51,7 @@ const VeterinarianDashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:8080/api/appointments/${id}/status`, { status: newStatus });
+      await axiosInstance.put(`/api/appointments/${id}/status`, { status: newStatus });
       fetchAppointments(vetData.id);
     } catch (err) {
       console.error(err);

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './Veterinarians.css';
 import Header from '../components/Header';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 const Veterinarian = () => {
   const [vets, setVets] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/veterinarians') // change if your backend URL is different
+    axiosInstance.get('/api/veterinarians')
       .then((res) => {
         setVets(res.data);
       })
@@ -35,7 +35,7 @@ const Veterinarian = () => {
               <p className="clinic">{vet.clinic}</p>
               <p className="location">{vet.location}</p>
               <p className="consult">➕ Face-to-face consultation</p>
-              
+
             </div>
           ))}
         </div>

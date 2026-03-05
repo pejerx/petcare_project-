@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import './AppointmentForm.css'; // Reuse your styles
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 const EditPet = ({ pet, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -31,14 +31,14 @@ const EditPet = ({ pet, onClose, onSuccess }) => {
         type: pet.type || '',
         weight: pet.weight || '',
         breed: pet.breed || '',
-         petOwnerId: pet.petOwner?.id || pet.petOwnerId || '',
+        petOwnerId: pet.petOwner?.id || pet.petOwnerId || '',
       });
     }
   }, [pet]);
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`http://localhost:8080/api/pets/${formData.id}`, formData);
+      await axiosInstance.put(`/api/pets/${formData.id}`, formData);
       alert('Pet updated successfully!');
       onSuccess?.(); // Refresh the pet list
     } catch (err) {
